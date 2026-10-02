@@ -1,0 +1,7 @@
+{
+  "name": "acme-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": { "dev": "vite", "build": "vite build", "test": "vitest run" },
+  "devDependencies": { "vite": "^5.0.0", "vitest": "^2.0.0" }
+}
