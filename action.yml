@@ -1,0 +1,36 @@
+name: agentrot
+description: Verify the claims in AGENTS.md / CLAUDE.md against the repository
+author: Nithinfgs
+branding:
+  icon: check-circle
+  color: gray-dark
+inputs:
+  path:
+    description: Directory to scan
+    default: .
+  fail-on:
+    description: error | warn | info | none
+    default: error
+  config:
+    description: Optional path to a config file
+    default: ''
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22
+    - name: Build agentrot
+      shell: bash
+      run: cd "${{ github.action_path }}" && npm ci --ignore-scripts && npm run build
+    - name: Run agentrot
+      shell: bash
+      env:
+        AGENTROT_PATH: ${{ inputs.path }}
+        AGENTROT_FAIL_ON: ${{ inputs.fail-on }}
+        AGENTROT_CONFIG: ${{ inputs.config }}
+      run: |
+        args=("$AGENTROT_PATH" --fail-on "$AGENTROT_FAIL_ON")
+        if [ -n "$AGENTROT_CONFIG" ]; then args+=(--config "$AGENTROT_CONFIG"); fi
+        node "${{ github.action_path }}/dist/src/cli.js" "${args[@]}" --format github
+        node "${{ github.action_path }}/dist/src/cli.js" "${args[@]}" --format markdown >> "$GITHUB_STEP_SUMMARY" || true

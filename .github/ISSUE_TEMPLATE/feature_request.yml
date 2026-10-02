@@ -1,0 +1,10 @@
+name: Rule or feature request
+description: A new check, ecosystem, or output format
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Which stale or wrong instruction should it catch?
+      description: Give a concrete example line and how the repo contradicts it.
+    validations: { required: true }
