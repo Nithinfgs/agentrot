@@ -10,6 +10,9 @@ const cli = path.join(root, 'dist', 'src', 'cli.js');
 const outDir = path.join(root, 'docs', 'assets');
 mkdirSync(outDir, { recursive: true });
 
+const ESC = String.fromCharCode(27);
+const SGR = new RegExp(`(${ESC}\\[[0-9;]*m)`);
+const SGR_ONE = new RegExp(`^${ESC}\\[([0-9;]*)m$`);
 const COLORS = { 31: '#ff7b72', 32: '#7ee787', 33: '#e3b341', 34: '#79c0ff' };
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
@@ -27,8 +30,8 @@ function ansiToSvg(command, ansi) {
     const spans = [];
     let state = { c: '#c9d1d9', b: false, d: false, u: false };
     let plain = '';
-    for (const part of raw.split(/(\x1b\[[0-9;]*m)/)) {
-      const m = /^\x1b\[([0-9;]*)m$/.exec(part);
+    for (const part of raw.split(SGR)) {
+      const m = SGR_ONE.exec(part);
       if (m) {
         for (const code of m[1].split(';').map(Number)) {
           if (code === 0) state = { c: '#c9d1d9', b: false, d: false, u: false };
