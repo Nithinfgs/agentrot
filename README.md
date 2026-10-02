@@ -12,7 +12,7 @@
 <p align="center"><img src="docs/assets/demo.svg" alt="agentrot output on a repo with stale AGENTS.md and CLAUDE.md files" width="760"></p>
 
 ```bash
-npx github:Nithinfgs/agentrot        # run it in any repo that has an AGENTS.md or CLAUDE.md
+npx github:Nithinfgs/agentrot
 ```
 
 No API key, no network, no LLM. It reads your instruction files and checks them against the repo.
